@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Static contents distribution using S3 and CloudFront.
 
+Parameters:
+  OwnerTagValue:
+    Type: String
+    Default: foobar
+
 Resources:
   # S3 bucket contains static contents
   AssetsBucket:
@@ -9,7 +14,7 @@ Resources:
     Properties:
       Tags:
         - Key: owner
-          Value: ma-yazawa
+          Value: !Ref OwnerTagValue
   # S3 bucket policy to allow access from CloudFront OAI
   AssetsBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -30,7 +35,7 @@ Resources:
     Properties:
       Tags:
         - Key: owner
-          Value: ma-yazawa
+          Value: !Ref OwnerTagValue
 
   # CloudFront Distribution for contents delivery
   AssetsDistribution:
@@ -54,7 +59,7 @@ Resources:
           Bucket: !GetAtt LogBucket.RegionalDomainName
       Tags:
         - Key: owner
-          Value: ma-yazawa
+          Value: !Ref OwnerTagValue
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
